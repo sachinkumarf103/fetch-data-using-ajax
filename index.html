@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajax</title>
+    <style>
+        #stud-det{
+            width: 95%;
+            border: 1px solid black;
+            box-sizing: border-box;
+            margin: auto;
+        }
+        table{
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table tr td{
+            padding: 5px 10px;
+        }
+        table tr:hover{
+            background-color: rgba(128, 128, 128, 0.1);
+            transform: scale(1.02);
+            cursor: pointer;
+            z-index: 10;
+        }
+        table td:hover{
+            border: 2px solid green  ;
+        }
+    </style>
+</head>
+<body>
+    <h2>Ajax Practice</h2>
+    <button id="click">Click</button>
+    <div id="stud-det">
+        <table border="1">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Name</th>
+                    <th>User Name</th>
+                    <th>Email</th>
+                    <th>Address</th>
+                    <th>Phone</th>
+                    <th>Website</th>
+                    <th>Company</th>
+                </tr>
+            </thead>
+            <tbody id="tab_bdy">
+
+            </tbody>
+        </table>
+    </div>
+
+    <script>
+        let btn = document.getElementById('click');
+        let url = "https://jsonplaceholder.typicode.com/users";
+
+        btn.addEventListener('click', () => {
+            const xhttp = new XMLHttpRequest();
+            xhttp.onreadystatechange = () => {
+                if(xhttp.readyState == 4 && xhttp.status == 200){
+                    let data = JSON.parse(xhttp.responseText);
+
+                    let tb_bdy = document.querySelector('#tab_bdy');
+                    let templet = ``;
+                    data.forEach(element => {
+                        let ur_add = element.address;
+                        templet += `
+                                    <tr>
+                                        <td>${element.id}</td>
+                                        <td>${element.name}</td>
+                                        <td>${element.username}</td>
+                                        <td>${element.email}</td>
+                                        <td>${`${ur_add.street}, ${ur_add.suite},${ur_add.city}, ${ur_add.zipcode}`}</td>
+                                        <td>${element.phone}</td>
+                                        <td>${element.website}</td>
+                                        <td>${element.company.name}</td>
+                                    </tr>
+                        `;
+                        tb_bdy.innerHTML = templet;
+                    });
+                }
+
+            };
+            xhttp.open("GET", url, true);
+            xhttp.send();
+        });
+    </script>
+</body>
+</html>
